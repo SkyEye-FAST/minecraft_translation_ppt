@@ -14,17 +14,29 @@
 pip install requests python-pptx Pillow -U
 ```
 
+## 前期准备
+
+### 语言文件
+
+Java版语言文件请使用[SkyEye-FAST/minecraft_translation](SkyEye-FAST/minecraft_translation)获取。
+
+请将获取到的`en_us.json`、`zh_cn.json`、`zh_hk.json`、`zh_tw.json`和`lzh.json`放置在语言文件文件夹下（默认为与脚本同级的`lang`文件夹，可以在配置文件中调整）。
+
+[`supplements.json`](/lang/supplements.json)中存有目前（2024年1月7日）游戏内语言文件缺失，而Crowdin上已更新的内容。
+
 ## 脚本使用
 
 ### 获取图片
 
 `image.py`用于从Minecraft Wiki获取等轴渲染图等图片。
 
-获取到的图片默认存储在与脚本同级的`image`文件夹下的对应分类中。
+获取到的图片默认保存在与脚本同级的`image`文件夹下的对应分类中，可以在配置文件中调整。此文件夹下的[`image_mapping.json`](/image/image_mapping.json)用于记录一些特殊情况，存有对应的图片映射。
+
+获取图片的日志会默认保存在与脚本同级的`log`文件夹下，可以在配置文件中调整。
 
 ### 复制幻灯片
 
-模板幻灯片文件已经在[`ppt`](/ppt)目录的对应分类下提供，名为`template.pptx`。由于模板幻灯片仅有一张，需要将其复制一定次数。
+模板幻灯片文件已经在幻灯片文件夹（默认为与脚本同级的`ppt`文件夹，，可以在配置文件中调整）的对应分类下提供，名为`template.pptx`。由于模板幻灯片仅有一张，需要将其复制一定次数。
 
 参考：[Slide.Copy 方法 (PowerPoint) | Microsoft Learn](https://learn.microsoft.com/zh-cn/office/vba/api/powerpoint.slide.copy)
 
@@ -47,6 +59,8 @@ pip install pywin32
 ### 查询翻译
 
 [`slide.py`](/slide.py)用于自动填充幻灯片中的内容。
+
+幻灯片按照源字符串的字母顺序排序。
 
 ## 设置动画
 
