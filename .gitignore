@@ -1,5 +1,6 @@
 __pycache__/
 bgm/
+/bgm.py
 log/
 *.json
 !lang/supplements.json
