@@ -8,7 +8,6 @@ from pptx import Presentation
 from pptx.util import Pt, Cm
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from base import (
-    P,
     LANG_DIR,
     IMAGE_DIR,
     PPT_DIR,
@@ -82,7 +81,7 @@ for lang in ["en_us", "zh_cn", "zh_hk", "zh_tw", "lzh"]:
 data = updated_data
 
 # 读取补充字符串
-with open(P / "supplements.json", "r", encoding="utf-8") as f:
+with open(LANG_DIR / "supplements.json", "r", encoding="utf-8") as f:
     supplements = json.load(f)
 for lang in ["zh_cn", "zh_hk", "zh_tw", "lzh"]:
     data[lang].update(supplements[lang])

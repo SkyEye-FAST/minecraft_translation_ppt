@@ -7,7 +7,6 @@ import logging
 import requests
 from requests.exceptions import SSLError
 from base import (
-    P,
     LOG_DIR,
     IMAGE_DIR,
     IGNORE_BLOCK,
@@ -72,7 +71,7 @@ IMAGE_DIR.mkdir(exist_ok=True)
 unknown = []
 
 # 读取图片映射
-with open(P / "image_mapping.json", "r", encoding="utf-8") as f:
+with open(IMAGE_DIR / "image_mapping.json", "r", encoding="utf-8") as f:
     image_mapping = json.load(f)
 
 for key, value in sorted_items:

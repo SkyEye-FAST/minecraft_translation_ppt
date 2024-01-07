@@ -1,7 +1,9 @@
 __pycache__/
 bgm/
 log/
-lang/*
+*.json
+!lang/supplements.json
+!image/image_mapping.json
 finished_media/
 *.png
 *.pptx
