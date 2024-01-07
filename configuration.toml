@@ -1,0 +1,50 @@
+[folder]
+# 语言文件文件夹
+language_folder = "lang"
+# 图片文件夹
+image_folder = "image"
+# 日志文件夹
+log_folder = "log"
+# 幻灯片文件夹
+slide_folder = "ppt"
+
+[category]
+# 是否忽略方块
+ignore_block = false
+# 是否忽略实体
+ignore_entity = false
+# 是否忽略物品
+ignore_item = false
+# 是否忽略状态效果
+ignore_effect = false
+# 是否忽略魔咒
+ignore_enchantment = false
+
+[image]
+# 是否忽略已保存的图片
+ignore_saved_image = false
+
+# 字体
+[slide.font]
+source = "思源宋体 SemiBold"
+translation_key = "Fira Code"
+zh_cn = "思源宋体"
+zh_hk = "思源宋體 香港"
+zh_tw = "思源宋體"
+lzh = "一点明体"
+# 是否加粗
+[slide.bold]
+source = false
+translation_key = false
+zh_cn = false
+zh_hk = false
+zh_tw = false
+lzh = true
+# 字体大小，磅
+[slide.size]
+source = 36
+translation_key = 18
+zh_cn = 20
+zh_hk = 20
+zh_tw = 20
+lzh = 20

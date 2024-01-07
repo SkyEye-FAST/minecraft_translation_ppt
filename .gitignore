@@ -1,0 +1,8 @@
+__pycache__/
+bgm/
+log/
+lang/*
+finished_media/
+*.png
+*.pptx
+!template.pptx
