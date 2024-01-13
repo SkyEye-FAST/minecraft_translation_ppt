@@ -17,7 +17,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pylint requests python-pptx Pillow
+        pip install pylint requests python-pptx Pillow pypiwin32
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py') -d E0611

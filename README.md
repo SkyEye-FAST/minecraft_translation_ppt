@@ -10,10 +10,10 @@
 
 由于使用了标准库`tomllib`，所以需要**Python >= 3.11**。
 
-需要库[requests](https://github.com/psf/requests)（`requests`）、[python-pptx](https://github.com/scanny/python-pptx)（`python-pptx`）和[Pillow](https://github.com/python-pillow/Pillow)（`Pillow`），请使用下面的命令安装：
+需要库[`requests`](https://github.com/psf/requests)、[`python-pptx`](https://github.com/scanny/python-pptx)、[`Pillow`](https://github.com/python-pillow/Pillow)和[`pypiwin32`](https://github.com/Googulator/pypiwin32)，请使用下面的命令安装：
 
 ``` shell
-pip install requests python-pptx Pillow -U
+pip install requests python-pptx Pillow pypiwin32 -U
 ```
 
 ## 前期准备
