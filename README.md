@@ -1,5 +1,7 @@
 # Minecraft中文标准译名列表视频生成器
 
+[![Pylint](https://github.com/SkyEye-FAST/minecraft_translation_ppt/actions/workflows/pylint.yml/badge.svg)](https://github.com/SkyEye-FAST/minecraft_translation_ppt/actions/workflows/pylint.yml)
+
 此项目用于生成Minecraft中文标准译名列表视频，载体为Microsoft PowerPoint。
 
 视频最终效果参见[哔哩哔哩上的此视频](https://www.bilibili.com/video/BV1Si4y1z75m/)。
