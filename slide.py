@@ -35,6 +35,7 @@ data = {}
 for file in file_list:
     with open(LANG_DIR / file, "r", encoding="utf-8") as f:
         data[file.split(".", maxsplit=1)[0]] = json.load(f)
+print("语言文件读取成功。")
 
 # 修正语言文件
 updated_data = data
