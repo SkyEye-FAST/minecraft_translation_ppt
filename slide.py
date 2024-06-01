@@ -3,169 +3,234 @@
 
 import json
 import re
+from typing import Dict, List
+
 from PIL import Image
-from pptx import Presentation
+from pptx import Presentation as prstt
 from pptx.util import Pt, Cm
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
+from pptx.presentation import Presentation
+
 from base import (
     LANG_DIR,
     IMAGE_DIR,
     PPT_DIR,
     SLIDE_CONFIG,
-    IGNORE_BLOCK,
-    IGNORE_ENTITY,
-    IGNORE_ITEM,
-    IGNORE_EFFECT,
-    IGNORE_ENCHANTMENT,
+    IGNORE_CATEGORIES,
+    IGNORE_SUPPLEMENTS,
     is_valid_block,
     is_valid_entity,
     is_valid_item,
+    Ldata,
+    LdataTuple
 )
 
-# 读取语言文件
-print("开始读取语言文件。")
-file_list = [
-    "en_us.json",
-    "zh_cn.json",
-    "zh_hk.json",
-    "zh_tw.json",
-    "lzh.json",
-]
-data = {}
-for file in file_list:
-    with open(LANG_DIR / file, "r", encoding="utf-8") as f:
-        data[file.split(".", maxsplit=1)[0]] = json.load(f)
-print("语言文件读取成功。")
 
-# 修正语言文件
-updated_data = data
+def load_language_files(file_list: List[str]) -> Dict[str, Ldata]:
+    """
+    读取语言文件。
 
-for lang in ["en_us", "zh_cn", "zh_hk", "zh_tw", "lzh"]:
-    netherite_upgrade_str = data[lang]["upgrade.minecraft.netherite_upgrade"]
-    smithing_template_str = data[lang]["item.minecraft.smithing_template"]
-    music_disc_str = data[lang]["item.minecraft.music_disc_5"]
-    banner_pattern_str = data[lang]["item.minecraft.mojang_banner_pattern"]
-    updated_data[lang]["item.minecraft.netherite_upgrade_smithing_template"] = (
-        netherite_upgrade_str + " " + smithing_template_str
-        if lang == "en_us"
-        else netherite_upgrade_str + smithing_template_str
-    )
-    trim_keys = [key for key in data[lang].keys() if "trim_smithing_template" in key]
-    keys_to_add = {
-        key: data[lang][
-            f"trim_pattern.minecraft.{key.split('.')[2].split('_', maxsplit=1)[0]}"
+    Args:
+        file_list (List[str]): 语言文件名列表。
+
+    Returns:
+        Dict[str, Ldata]: 包含语言数据的字典。
+    """
+
+    print("开始读取语言文件。")
+    data = {}
+    for file in file_list:
+        with open(LANG_DIR / file, "r", encoding="utf-8") as f:
+            data[file.split(".", maxsplit=1)[0]] = json.load(f)
+    print("语言文件读取成功。")
+    return data
+
+
+def update_language_data(data: Dict[str, Ldata]) -> Dict[str, Ldata]:
+    """
+    修正语言文件数据。
+
+    Args:
+        data (Dict[str, Ldata]): 原始语言数据。
+
+    Returns:
+        Dict[str, Ldata]: 修正后的语言数据。
+    """
+
+    updated_data = data.copy()
+    for lang in ["en_us", "zh_cn", "zh_hk", "zh_tw", "lzh"]:
+        netherite_upgrade_str = data[lang].get(
+            "upgrade.minecraft.netherite_upgrade", ""
+        )
+        smithing_template_str = data[lang].get("item.minecraft.smithing_template", "")
+        music_disc_str = data[lang].get("item.minecraft.music_disc_5", "")
+        banner_pattern_str = data[lang].get("item.minecraft.mojang_banner_pattern", "")
+
+        updated_data[lang]["item.minecraft.netherite_upgrade_smithing_template"] = (
+            f"{netherite_upgrade_str} {smithing_template_str}"
+            if lang == "en_us"
+            else f"{netherite_upgrade_str}{smithing_template_str}"
+        )
+
+        trim_keys = [key for key in data[lang] if "trim_smithing_template" in key]
+        for key in trim_keys:
+            variant = key.split(".")[2].split("_", maxsplit=1)[0]
+            trim_pattern_str = data[lang].get(f"trim_pattern.minecraft.{variant}", "")
+            updated_data[lang][key] = (
+                f"{trim_pattern_str} {smithing_template_str}"
+                if lang == "en_us"
+                else f"{trim_pattern_str}{smithing_template_str}"
+            )
+
+        keys_to_delete = [
+            key
+            for key in data[lang]
+            if key.startswith("item.minecraft.music_disc")
+            or re.match(r"item\.minecraft\.(.*)_banner_pattern", key)
         ]
-        + " "
-        + smithing_template_str
-        if lang == "en_us"
-        else data[lang][
-            f"trim_pattern.minecraft.{key.split('.')[2].split('_', maxsplit=1)[0]}"
-        ]
-        + smithing_template_str
-        for key in trim_keys
-    }
-    updated_data[lang].update(keys_to_add)
+        for key in keys_to_delete:
+            updated_data[lang].pop(key, None)
+        updated_data[lang].pop("item.minecraft.smithing_template", None)
 
-    keys_to_delete = [
-        key
-        for key in data[lang].keys()
-        if key.startswith("item.minecraft.music_disc")
-        or re.match(r"item\.minecraft\.(.*)_banner_pattern", key)
-    ]
-    for key in keys_to_delete:
-        del updated_data[lang][key]
-    del updated_data[lang]["item.minecraft.smithing_template"]
+        updated_data[lang]["item.minecraft.music_disc_*"] = music_disc_str
+        updated_data[lang]["item.minecraft.*_banner_pattern"] = banner_pattern_str
 
-    updated_data[lang]["item.minecraft.music_disc_*"] = music_disc_str
-    updated_data[lang]["item.minecraft.*_banner_pattern"] = banner_pattern_str
-
-data = updated_data
-
-# 读取补充字符串
-with open(LANG_DIR / "supplements.json", "r", encoding="utf-8") as f:
-    supplements = json.load(f)
-for lang in ["zh_cn", "zh_hk", "zh_tw", "lzh"]:
-    data[lang].update(supplements[lang])
-print(f"已补充{len(supplements['zh_cn'])}条字符串。")
+    return updated_data
 
 
-def edit_text(slide_data: dict, category: str, prs):
-    """编辑幻灯片文本"""
+def load_supplements(data: Dict[str, Ldata]) -> None:
+    """
+    读取并合并补充字符串。
+
+    Args:
+        data (Dict[str, Ldata]): 语言数据。
+    """
+
+    with open(LANG_DIR / "supplements.json", "r", encoding="utf-8") as f:
+        supplements = json.load(f)
+    for lang in ["zh_cn", "zh_hk", "zh_tw", "lzh"]:
+        data[lang].update(supplements[lang])
+    print(f"已补充{len(supplements['zh_cn'])}条字符串。")
+
+
+def edit_text(
+    slide_data: Dict[str, LdataTuple], category: str, prs: Presentation
+) -> None:
+    """
+    编辑幻灯片文本。
+
+    Args:
+        slide_data (Dict[str, LdataTuple]): 幻灯片数据。
+        category (str): 分类名称。
+        prs (Presentation): 幻灯片对象。
+    """
+
     print(f"开始编辑幻灯片文本，分类：{category}。")
-
     for n, slide in enumerate(prs.slides):
         for shape in slide.shapes:
-            # 编辑文本框
             if shape.has_text_frame:
                 tf = shape.text_frame
                 # 源字符串
                 if tf.text == "Source String":
                     tf.text = slide_data["en_us"][n][1]
-                    tf.paragraphs[0].alignment = PP_ALIGN.CENTER
-                    tf.paragraphs[0].font.name = SLIDE_CONFIG["font"]["source"]
-                    tf.paragraphs[0].font.size = Pt(SLIDE_CONFIG["size"]["source"])
+                    paragraph = tf.paragraphs[0]
+                    paragraph.alignment = PP_ALIGN.CENTER
+                    paragraph.font.name = SLIDE_CONFIG["font"]["source"]
+                    paragraph.font.size = Pt(SLIDE_CONFIG["size"]["source"])
+                    paragraph.font.bold = SLIDE_CONFIG["bold"]["source"]
                 # 本地化键名
-                if tf.text == "Translation Key":
+                elif tf.text == "Translation Key":
                     tf.text = slide_data["en_us"][n][0]
-                    tf.paragraphs[0].alignment = PP_ALIGN.CENTER
-                    tf.paragraphs[0].font.name = SLIDE_CONFIG["font"]["translation_key"]
-                    tf.paragraphs[0].font.size = Pt(
-                        SLIDE_CONFIG["size"]["translation_key"]
-                    )
+                    paragraph = tf.paragraphs[0]
+                    paragraph.alignment = PP_ALIGN.CENTER
+                    paragraph.font.name = SLIDE_CONFIG["font"]["key"]
+                    paragraph.font.size = Pt(SLIDE_CONFIG["size"]["key"])
+                    paragraph.font.bold = SLIDE_CONFIG["bold"]["key"]
             # 编辑表格
             if shape.has_table:
                 table = shape.table
-
                 for i, lang_name in enumerate(
                     ["zh_cn", "zh_hk", "zh_tw", "lzh"], start=1
                 ):
-                    table.cell(i, 1).text = slide_data[lang_name][n][1]
-                    cell = table.cell(i, 1).text_frame.paragraphs[0]
-                    cell.font.name = SLIDE_CONFIG["font"][lang_name]
-                    cell.font.bold = SLIDE_CONFIG["bold"][lang_name]
-                    cell.vertical_anchor = MSO_ANCHOR.MIDDLE
-                    cell.alignment = PP_ALIGN.CENTER
-                    cell.font.size = Pt(SLIDE_CONFIG["size"][lang_name])
+                    cell = table.cell(i, 1)
+                    cell.text = slide_data[lang_name][n][1]
+                    paragraph = cell.text_frame.paragraphs[0]
+                    paragraph.alignment = PP_ALIGN.CENTER
+                    paragraph.vertical_anchor = MSO_ANCHOR.MIDDLE
+                    paragraph.font.name = SLIDE_CONFIG["font"][lang_name]
+                    paragraph.font.size = Pt(SLIDE_CONFIG["size"][lang_name])
+                    paragraph.font.bold = SLIDE_CONFIG["bold"][lang_name]
 
 
-def add_image(slide_data: dict, category: str, prs):
-    """在幻灯片中添加图片"""
+def add_image(
+    slide_data: Dict[str, LdataTuple], category: str, prs: Presentation
+) -> None:
+    """
+    在幻灯片中添加图片。
+
+    Args:
+        slide_data (Dict[str, LdataTuple]): 幻灯片数据。
+        category (str): 分类名称。
+        prs (Presentation): 幻灯片对象。
+    """
+
     print(f"开始添加图片，分类：{category}。")
-
     for n, slide in enumerate(prs.slides):
-        # 添加图片
-        img_path = str(IMAGE_DIR / category / f"{slide_data['en_us'][n][1]}.png")
-        img_size = Image.open(img_path).size
+        img_path = IMAGE_DIR / category / f"{slide_data['en_us'][n][1]}.png"
+        if img_path.exists():
+            img = Image.open(img_path)
+            img_width, img_height = img.size
+            img_width_cm = img_width / 72 * 2.54
+            img_height_cm = img_height / 72 * 2.54
 
-        img_height = img_size[1] / 720 * 19.05
-        img_width = img_size[0] / 720 * 19.05
-        if img_height > 12:
-            img_width = img_width * 11.5 / img_height
-            img_height = 11.5
-        if img_width > 8:
-            img_height = img_height * 8 / img_width
-            img_width = 8
+            if img_height_cm > 12:
+                img_width_cm *= 12 / img_height_cm
+                img_height_cm = 12
+            if img_width_cm > 8:
+                img_height_cm *= 8 / img_width_cm
+                img_width_cm = 8
 
-        slide.shapes.add_picture(
-            image_file=img_path,
-            left=Cm(28.57 - img_width / 2),
-            top=Cm((19.05 - img_height) / 2 + 0.38),
-            width=Cm(img_width),
-            height=Cm(img_height),
-        )
-
-
-def edit_slide(slide_data: dict, category: str):
-    """编辑幻灯片"""
-    prs = Presentation(PPT_DIR / category / "copied.pptx")
-    edit_text(slide_data, category, prs)
-    if category != "enchantment":
-        add_image(slide_data, category, prs)
-    prs.save(PPT_DIR / category / "output.pptx")
+            slide.shapes.add_picture(
+                image_file=str(img_path),
+                left=Cm(28.57 - img_width_cm / 2),
+                top=Cm((19.05 - img_height_cm) / 2 + 0.38),
+                width=Cm(img_width_cm),
+                height=Cm(img_height_cm),
+            )
 
 
-def sort_data(lang_data: dict, key_prefix: str, validator: bool):
-    """排序语言数据"""
+def edit_slide(slide_data: Dict[str, LdataTuple], category: str) -> None:
+    """
+    编辑幻灯片。
+
+    Args:
+        slide_data (Dict[str, LdataTuple]): 幻灯片数据。
+        category (str): 分类名称。
+    """
+    prs_path = PPT_DIR / category / "copied.pptx"
+    if prs_path.exists():
+        prs = prstt(prs_path)
+        edit_text(slide_data, category, prs)
+        if category != "enchantment":
+            add_image(slide_data, category, prs)
+        prs.save(PPT_DIR / category / "output.pptx")
+
+
+def sort_data(
+    lang_data: Dict[str, Ldata], key_prefix: str, validator
+) -> Dict[str, LdataTuple]:
+    """
+    排序语言数据。
+
+    Args:
+        lang_data (Dict[str, Ldata]): 语言数据。
+        key_prefix (str): 键名前缀。
+        validator (Callable[[str], bool]): 验证函数。
+
+    Returns:
+        Dict[str, LdataTuple]: 排序后的语言数据。
+    """
+
     sorted_data = {
         "en_us": sorted(
             (
@@ -189,23 +254,37 @@ def sort_data(lang_data: dict, key_prefix: str, validator: bool):
     return sorted_data
 
 
-# 生成内容
-print("开始生成幻灯片内容。")
+def main() -> None:
+    """
+    主函数，生成幻灯片内容。
+    """
 
-if not IGNORE_BLOCK:
-    sorted_data_block = sort_data(data, "", is_valid_block)
-    edit_slide(sorted_data_block, "block")
-if not IGNORE_ENTITY:
-    sorted_data_entity = sort_data(data, "", is_valid_entity)
-    edit_slide(sorted_data_entity, "entity")
-if not IGNORE_ITEM:
-    sorted_data_item = sort_data(data, "", is_valid_item)
-    edit_slide(sorted_data_item, "item")
-if not IGNORE_EFFECT:
-    sorted_data_effect = sort_data(data, "effect.minecraft.", lambda x: True)
-    edit_slide(sorted_data_effect, "effect")
-if not IGNORE_ENCHANTMENT:
-    sorted_data_enchantment = sort_data(data, "enchantment.minecraft.", lambda x: True)
-    edit_slide(sorted_data_enchantment, "enchantment")
+    file_list = ["en_us.json", "zh_cn.json", "zh_hk.json", "zh_tw.json", "lzh.json"]
+    data = load_language_files(file_list)
+    data = update_language_data(data)
+    if not IGNORE_SUPPLEMENTS:
+        load_supplements(data)
 
-print("已完成。")
+    print("开始生成幻灯片内容。")
+    if not IGNORE_CATEGORIES["block"]:
+        sorted_data_block = sort_data(data, "", is_valid_block)
+        edit_slide(sorted_data_block, "block")
+    if not IGNORE_CATEGORIES["entity"]:
+        sorted_data_entity = sort_data(data, "", is_valid_entity)
+        edit_slide(sorted_data_entity, "entity")
+    if not IGNORE_CATEGORIES["item"]:
+        sorted_data_item = sort_data(data, "", is_valid_item)
+        edit_slide(sorted_data_item, "item")
+    if not IGNORE_CATEGORIES["effect"]:
+        sorted_data_effect = sort_data(data, "effect.minecraft.", lambda x: True)
+        edit_slide(sorted_data_effect, "effect")
+    if not IGNORE_CATEGORIES["enchantment"]:
+        sorted_data_enchantment = sort_data(
+            data, "enchantment.minecraft.", lambda x: True
+        )
+        edit_slide(sorted_data_enchantment, "enchantment")
+    print("已完成。")
+
+
+if __name__ == "__main__":
+    main()

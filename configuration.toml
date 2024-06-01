@@ -1,3 +1,7 @@
+[lang]
+# 忽略补充字符串
+ignore_supplements = true
+
 [folder]
 # 语言文件文件夹
 language_folder = "lang"
@@ -27,7 +31,7 @@ ignore_saved_image = false
 # 字体
 [slide.font]
 source = "思源宋体 SemiBold"
-translation_key = "Fira Code"
+key = "Fira Code"
 zh_cn = "思源宋体"
 zh_hk = "思源宋體 香港"
 zh_tw = "思源宋體"
@@ -35,15 +39,15 @@ lzh = "一点明体"
 # 是否加粗
 [slide.bold]
 source = false
-translation_key = false
+key = false
 zh_cn = false
 zh_hk = false
 zh_tw = false
-lzh = true
+lzh = false
 # 字体大小，磅
 [slide.size]
 source = 36
-translation_key = 18
+key = 18
 zh_cn = 20
 zh_hk = 20
 zh_tw = 20
