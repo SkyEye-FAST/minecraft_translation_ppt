@@ -4,7 +4,7 @@ ignore_supplements = true
 
 [folder]
 # 语言文件文件夹
-language_folder = "lang"
+language_folder = "mc_lang/full"
 # 图片文件夹
 image_folder = "image"
 # 日志文件夹
