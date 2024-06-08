@@ -85,7 +85,7 @@ if __name__ == "__main__":
         image_mapping: Ldata = json.load(f)
 
     for key, value in sorted_items:
-        key_type = key.split(".")[0]
+        key_type = "item" if key.split(".")[0] == "filled_map" else key.split(".")[0]
         (IMAGE_DIR / key_type).mkdir(exist_ok=True)
 
         file_name = f"{value}.png"

@@ -18,9 +18,11 @@ from base import (
     SLIDE_CONFIG,
     IGNORE_CATEGORIES,
     IGNORE_SUPPLEMENTS,
+    NEW_STRINGS_ONLY,
     is_valid_key,
     Ldata,
     LdataTuple,
+    language_data,
 )
 
 
@@ -39,7 +41,9 @@ def load_language_files(file_list: List[str]) -> Dict[str, Ldata]:
     data = {}
     for file in file_list:
         with open(LANG_DIR / file, "r", encoding="utf-8") as f:
-            data[file.split(".", maxsplit=1)[0]] = json.load(f)
+            data[l := file.split(".", maxsplit=1)[0]] = json.load(f)
+            if NEW_STRINGS_ONLY:
+                data[l] = {k: v for k, v in data[l].items() if k in language_data}
     print("语言文件读取成功。")
     return data
 
@@ -57,18 +61,8 @@ def update_language_data(data: Dict[str, Ldata]) -> Dict[str, Ldata]:
 
     updated_data = data.copy()
     for lang in ["en_us", "zh_cn", "zh_hk", "zh_tw", "lzh"]:
-        netherite_upgrade_str = data[lang].get(
-            "upgrade.minecraft.netherite_upgrade", ""
-        )
         smithing_template_str = data[lang].get("item.minecraft.smithing_template", "")
-        music_disc_str = data[lang].get("item.minecraft.music_disc_5", "")
         banner_pattern_str = data[lang].get("item.minecraft.mojang_banner_pattern", "")
-
-        updated_data[lang]["item.minecraft.netherite_upgrade_smithing_template"] = (
-            f"{netherite_upgrade_str} {smithing_template_str}"
-            if lang == "en_us"
-            else f"{netherite_upgrade_str}{smithing_template_str}"
-        )
 
         trim_keys = [key for key in data[lang] if "trim_smithing_template" in key]
         for key in trim_keys:
@@ -90,8 +84,18 @@ def update_language_data(data: Dict[str, Ldata]) -> Dict[str, Ldata]:
             updated_data[lang].pop(key, None)
         updated_data[lang].pop("item.minecraft.smithing_template", None)
 
-        updated_data[lang]["item.minecraft.music_disc_*"] = music_disc_str
-        updated_data[lang]["item.minecraft.*_banner_pattern"] = banner_pattern_str
+        if not NEW_STRINGS_ONLY:
+            netherite_upgrade_str = data[lang].get(
+                "upgrade.minecraft.netherite_upgrade", ""
+            )
+            music_disc_str = data[lang].get("item.minecraft.music_disc_5", "")
+            updated_data[lang]["item.minecraft.netherite_upgrade_smithing_template"] = (
+                f"{netherite_upgrade_str} {smithing_template_str}"
+                if lang == "en_us"
+                else f"{netherite_upgrade_str}{smithing_template_str}"
+            )
+            updated_data[lang]["item.minecraft.music_disc_*"] = music_disc_str
+            updated_data[lang]["item.minecraft.*_banner_pattern"] = banner_pattern_str
 
     return updated_data
 
@@ -212,6 +216,8 @@ def edit_slide(slide_data: Dict[str, LdataTuple], category: str) -> None:
         if category not in {"advancements", "biome", "enchantment"}:
             add_image(slide_data, category, prs)
         prs.save(PPT_DIR / category / "output.pptx")
+    else:
+        print(f"分类{category}不存在已复制的幻灯片。")
 
 
 def sort_data(lang_data: Dict[str, Ldata], *categories: str) -> Dict[str, LdataTuple]:

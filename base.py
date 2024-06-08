@@ -40,6 +40,7 @@ IGNORE_CATEGORIES = {
 }
 IGNORE_SAVED_IMAGE = config["image"]["ignore_saved_image"]
 IGNORE_SUPPLEMENTS = config["lang"]["ignore_supplements"]
+NEW_STRINGS_ONLY = config["lang"]["new_strings_only"]
 
 
 def is_valid_key(input_key: str, *categories: str) -> bool:
@@ -57,12 +58,15 @@ def is_valid_key(input_key: str, *categories: str) -> bool:
 
 
 # 读取语言文件
-LANG_FILE_PATH = LANG_DIR / "en_us.json"
+if NEW_STRINGS_ONLY:
+    LANG_FILE_PATH = P / "en_us_diff.json"
+else:
+    LANG_FILE_PATH = LANG_DIR / "en_us.json"
 if not LANG_FILE_PATH.exists():
     print("\n无法找到语言文件，请检查文件路径。")
     sys.exit()
 with open(LANG_FILE_PATH, "r", encoding="utf-8") as f:
-    language_data: Dict[str, str] = json.load(f)
+    language_data: Ldata = json.load(f)
 
 # 修正语言文件
 keys_to_remove = [
@@ -88,10 +92,12 @@ for key, value in language_data.items():
 
 language_data.update(updated_language_data)
 
-language_data.update(
-    {
-        "item.minecraft.netherite_upgrade_smithing_template": "Netherite Upgrade Smithing Template",
-        "item.minecraft.music_disc_*": "Music Disc",
-        "item.minecraft.*_banner_pattern": "Banner Pattern",
-    }
-)
+
+update_data = {
+    "item.minecraft.netherite_upgrade_smithing_template": "Netherite Upgrade Smithing Template",
+    "item.minecraft.music_disc_*": "Music Disc",
+    "item.minecraft.*_banner_pattern": "Banner Pattern",
+}
+
+if not NEW_STRINGS_ONLY:
+    language_data.update(update_data)

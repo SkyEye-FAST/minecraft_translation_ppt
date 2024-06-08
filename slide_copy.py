@@ -24,20 +24,22 @@ def copy_slide(*category: str) -> None:
     """
 
     print(f"开始复制模板幻灯片，分类：{category[0]}。")
+    dir_c = PPT_DIR / category[0]
     ppt = Dispatch("PowerPoint.Application")
-    ppt.Visible = 1  # 后台运行
     ppt.DisplayAlerts = 0  # 不显示，不警告
-    ppt_file = ppt.Presentations.Open(str(PPT_DIR / category[0] / "template.pptx"))
-    ppt_file.Slides(1).Copy()
-    copy_num = sum(
-        1 for key in language_data if is_valid_key(key, *category)
-    )
-    for _ in range(copy_num - 1):
-        ppt_file.Slides.Paste()
-    ppt_file.SaveAs(str(PPT_DIR / category[0] / "copied.pptx"))
-    ppt_file.Close()
-    ppt.Quit()
-    print("已完成。\n")
+    copy_num = sum(1 for key in language_data if is_valid_key(key, *category))
+    if copy_num == 0:
+        print(f"不存在分类为{category[0]}的字符串。\n")
+    else:
+        template_path = str(dir_c / "template.pptx")
+        ppt_file = ppt.Presentations.Open(template_path, True, False, False)
+        ppt_file.Slides(1).Copy()
+        for _ in range(copy_num - 1):
+            ppt_file.Slides.Paste()
+        ppt_file.SaveAs(str(dir_c / "copied.pptx"))
+        ppt_file.Close()
+        ppt.Quit()
+        print("已完成。\n")
 
 
 def main() -> None:

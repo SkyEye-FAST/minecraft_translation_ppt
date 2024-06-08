@@ -1,6 +1,8 @@
 [lang]
 # 忽略补充字符串
 ignore_supplements = true
+# 仅生成新增字符串
+new_strings_only = true
 
 [folder]
 # 语言文件文件夹
