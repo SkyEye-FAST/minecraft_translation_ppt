@@ -6,7 +6,7 @@ import json
 import sys
 import tomllib as tl
 from pathlib import Path
-from typing import Dict, Set, List, Tuple, Optional, TypeAlias
+from typing import Dict, List, Tuple, TypeAlias
 
 # 当前绝对路径
 P = Path(__file__).resolve().parent
@@ -30,6 +30,8 @@ LOG_DIR = P / config["folder"]["log_folder"]
 PPT_DIR = P / config["folder"]["slide_folder"]
 SLIDE_CONFIG = config["slide"]
 IGNORE_CATEGORIES = {
+    "advancements": config["category"]["ignore_advancements"],
+    "biome": config["category"]["ignore_biome"],
     "block": config["category"]["ignore_block"],
     "entity": config["category"]["ignore_entity"],
     "item": config["category"]["ignore_item"],
@@ -40,87 +42,18 @@ IGNORE_SAVED_IMAGE = config["image"]["ignore_saved_image"]
 IGNORE_SUPPLEMENTS = config["lang"]["ignore_supplements"]
 
 
-def is_valid_key(
-    input_key: str,
-    category: str,
-    invalid_pattern: str,
-    exclusions: Optional[Set[str]] = None,
-) -> bool:
+def is_valid_key(input_key: str, *categories: str) -> bool:
     """
-    判断是否为有效键名
+    判断是否为有效键名。
 
     Args:
         input_key (str): 键名
-        category (str): 类别（如 'block', 'entity', 'item'）
-        invalid_pattern (str): 正则无效模式
-        exclusions (Set[str]): 排除项
+        categories (str): 多个类别（如 'block', 'entity', 'item'）
 
     Returns:
         bool: 如果是有效键名，返回 True，否则返回 False
     """
-
-    if not input_key.startswith(f"{category}.minecraft."):
-        return False
-    if re.match(invalid_pattern, input_key):
-        return False
-    if exclusions:
-        if input_key in exclusions:
-            return False
-    return True
-
-
-def is_valid_block(block_key: str) -> bool:
-    """
-    判断是否为有效方块键名
-
-    Args:
-        block_key (str): 方块键名
-
-    Returns:
-        bool: 如果是有效方块键名，返回 True，否则返回 False
-    """
-
-    return is_valid_key(
-        block_key,
-        "block",
-        r"^block\.minecraft\.(banner\.[^.]+|[^.]+)\.[^.]+$",
-        {"block.minecraft.set_spawn"},
-    )
-
-
-def is_valid_entity(entity_key: str) -> bool:
-    """
-    判断是否为有效实体键名
-
-    Args:
-        entity_key (str): 实体键名
-
-    Returns:
-        bool: 如果是有效实体键名，返回 True，否则返回 False
-    """
-
-    return is_valid_key(
-        entity_key,
-        "entity",
-        r"^entity\.minecraft\.[^.]+\.[^.]+(\.[^.]+)?$",
-        {"entity.minecraft.falling_block_type"},
-    )
-
-
-def is_valid_item(item_key: str) -> bool:
-    """
-    判断是否为有效物品键名
-
-    Args:
-        item_key (str): 物品键名
-
-    Returns:
-        bool: 如果是有效物品键名，返回 True，否则返回 False
-    """
-
-    return is_valid_key(
-        item_key, "item", r"^(item\.minecraft\.[^.]+\.[^.]+(\.[^.]+)?|.*pottery_shard.*)$"
-    ) or bool(re.match(r"^item\.minecraft\.[^.]*\.effect\.[^.]*$", item_key))
+    return any(input_key.startswith(f"{category}") for category in categories)
 
 
 # 读取语言文件

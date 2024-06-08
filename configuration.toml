@@ -4,7 +4,7 @@ ignore_supplements = true
 
 [folder]
 # 语言文件文件夹
-language_folder = "mc_lang/full"
+language_folder = "mc_lang/valid"
 # 图片文件夹
 image_folder = "image"
 # 日志文件夹
@@ -13,6 +13,10 @@ log_folder = "log"
 slide_folder = "ppt"
 
 [category]
+# 是否忽略进度
+ignore_advancements = false
+# 是否忽略生物群系
+ignore_biome = false
 # 是否忽略方块
 ignore_block = false
 # 是否忽略实体
@@ -43,7 +47,7 @@ key = false
 zh_cn = false
 zh_hk = false
 zh_tw = false
-lzh = false
+lzh = true
 # 字体大小，磅
 [slide.size]
 source = 36

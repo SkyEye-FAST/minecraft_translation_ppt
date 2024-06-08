@@ -18,11 +18,9 @@ from base import (
     SLIDE_CONFIG,
     IGNORE_CATEGORIES,
     IGNORE_SUPPLEMENTS,
-    is_valid_block,
-    is_valid_entity,
-    is_valid_item,
+    is_valid_key,
     Ldata,
-    LdataTuple
+    LdataTuple,
 )
 
 
@@ -31,10 +29,10 @@ def load_language_files(file_list: List[str]) -> Dict[str, Ldata]:
     读取语言文件。
 
     Args:
-        file_list (List[str]): 语言文件名列表。
+        file_list (List[str]): 语言文件名列表
 
     Returns:
-        Dict[str, Ldata]: 包含语言数据的字典。
+        Dict[str, Ldata]: 包含语言数据的字典
     """
 
     print("开始读取语言文件。")
@@ -51,10 +49,10 @@ def update_language_data(data: Dict[str, Ldata]) -> Dict[str, Ldata]:
     修正语言文件数据。
 
     Args:
-        data (Dict[str, Ldata]): 原始语言数据。
+        data (Dict[str, Ldata]): 原始语言数据
 
     Returns:
-        Dict[str, Ldata]: 修正后的语言数据。
+        Dict[str, Ldata]: 修正后的语言数据
     """
 
     updated_data = data.copy()
@@ -103,7 +101,7 @@ def load_supplements(data: Dict[str, Ldata]) -> None:
     读取并合并补充字符串。
 
     Args:
-        data (Dict[str, Ldata]): 语言数据。
+        data (Dict[str, Ldata]): 语言数据
     """
 
     with open(LANG_DIR / "supplements.json", "r", encoding="utf-8") as f:
@@ -120,9 +118,9 @@ def edit_text(
     编辑幻灯片文本。
 
     Args:
-        slide_data (Dict[str, LdataTuple]): 幻灯片数据。
-        category (str): 分类名称。
-        prs (Presentation): 幻灯片对象。
+        slide_data (Dict[str, LdataTuple]): 幻灯片数据
+        category (str): 分类名称
+        prs (Presentation): 幻灯片对象
     """
 
     print(f"开始编辑幻灯片文本，分类：{category}。")
@@ -169,9 +167,9 @@ def add_image(
     在幻灯片中添加图片。
 
     Args:
-        slide_data (Dict[str, LdataTuple]): 幻灯片数据。
-        category (str): 分类名称。
-        prs (Presentation): 幻灯片对象。
+        slide_data (Dict[str, LdataTuple]): 幻灯片数据
+        category (str): 分类名称
+        prs (Presentation): 幻灯片对象
     """
 
     print(f"开始添加图片，分类：{category}。")
@@ -204,31 +202,28 @@ def edit_slide(slide_data: Dict[str, LdataTuple], category: str) -> None:
     编辑幻灯片。
 
     Args:
-        slide_data (Dict[str, LdataTuple]): 幻灯片数据。
-        category (str): 分类名称。
+        slide_data (Dict[str, LdataTuple]): 幻灯片数据
+        category (str): 分类名称
     """
     prs_path = PPT_DIR / category / "copied.pptx"
     if prs_path.exists():
         prs = prstt(prs_path)
         edit_text(slide_data, category, prs)
-        if category != "enchantment":
+        if category not in {"advancements", "biome", "enchantment"}:
             add_image(slide_data, category, prs)
         prs.save(PPT_DIR / category / "output.pptx")
 
 
-def sort_data(
-    lang_data: Dict[str, Ldata], key_prefix: str, validator
-) -> Dict[str, LdataTuple]:
+def sort_data(lang_data: Dict[str, Ldata], *categories: str) -> Dict[str, LdataTuple]:
     """
     排序语言数据。
 
     Args:
-        lang_data (Dict[str, Ldata]): 语言数据。
-        key_prefix (str): 键名前缀。
-        validator (Callable[[str], bool]): 验证函数。
+        lang_data (Dict[str, Ldata]): 语言数据
+        categories (str): 多个分类
 
     Returns:
-        Dict[str, LdataTuple]: 排序后的语言数据。
+        Dict[str, LdataTuple]: 排序后的语言数据
     """
 
     sorted_data = {
@@ -236,7 +231,7 @@ def sort_data(
             (
                 (key, value)
                 for key, value in lang_data["en_us"].items()
-                if key.startswith(key_prefix) and validator(key)
+                if is_valid_key(key, *categories)
             ),
             key=lambda x: x[1],
         )
@@ -247,7 +242,7 @@ def sort_data(
             (
                 (key, value)
                 for key, value in lang_data[lang_name].items()
-                if key.startswith(key_prefix) and validator(key)
+                if is_valid_key(key, *categories)
             ),
             key=lambda x: sorted_keys.index(x[0]),
         )
@@ -266,22 +261,26 @@ def main() -> None:
         load_supplements(data)
 
     print("开始生成幻灯片内容。")
+    if not IGNORE_CATEGORIES["advancements"]:
+        sorted_data_block = sort_data(data, "advancements")
+        edit_slide(sorted_data_block, "advancements")
+    if not IGNORE_CATEGORIES["biome"]:
+        sorted_data_block = sort_data(data, "biome")
+        edit_slide(sorted_data_block, "biome")
     if not IGNORE_CATEGORIES["block"]:
-        sorted_data_block = sort_data(data, "", is_valid_block)
+        sorted_data_block = sort_data(data, "block")
         edit_slide(sorted_data_block, "block")
     if not IGNORE_CATEGORIES["entity"]:
-        sorted_data_entity = sort_data(data, "", is_valid_entity)
+        sorted_data_entity = sort_data(data, "entity")
         edit_slide(sorted_data_entity, "entity")
     if not IGNORE_CATEGORIES["item"]:
-        sorted_data_item = sort_data(data, "", is_valid_item)
+        sorted_data_item = sort_data(data, "item", "filled_map")
         edit_slide(sorted_data_item, "item")
     if not IGNORE_CATEGORIES["effect"]:
-        sorted_data_effect = sort_data(data, "effect.minecraft.", lambda x: True)
+        sorted_data_effect = sort_data(data, "effect")
         edit_slide(sorted_data_effect, "effect")
     if not IGNORE_CATEGORIES["enchantment"]:
-        sorted_data_enchantment = sort_data(
-            data, "enchantment.minecraft.", lambda x: True
-        )
+        sorted_data_enchantment = sort_data(data, "enchantment")
         edit_slide(sorted_data_enchantment, "enchantment")
     print("已完成。")
 

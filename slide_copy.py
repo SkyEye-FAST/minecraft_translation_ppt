@@ -4,44 +4,37 @@
 模拟手动复制粘贴操作，请不要在脚本运行过程中覆盖剪贴板。
 """
 
-from typing import Callable
-
 from win32com.client import Dispatch
 
 from base import (
     PPT_DIR,
     IGNORE_CATEGORIES,
-    is_valid_block,
-    is_valid_entity,
-    is_valid_item,
+    is_valid_key,
     language_data,
 )
 
 
-def copy_slide(
-    category: str, key_prefix: str, validator: Callable[[str], bool]
-) -> None:
+def copy_slide(*category: str) -> None:
     """
     复制幻灯片
 
     Args:
-        category (str): 幻灯片类别
-        key_prefix (str): 键前缀，用于筛选语言数据
-        validator (Callable[[str], bool]): 验证函数，用于验证键是否有效
+        category (str): 类别
+        validator (Optional[Callable[[str], bool]]): 验证函数，用于验证键是否有效；默认为None
     """
 
-    print(f"开始复制模板幻灯片，分类：{category}。")
+    print(f"开始复制模板幻灯片，分类：{category[0]}。")
     ppt = Dispatch("PowerPoint.Application")
     ppt.Visible = 1  # 后台运行
     ppt.DisplayAlerts = 0  # 不显示，不警告
-    ppt_file = ppt.Presentations.Open(str(PPT_DIR / category / "template.pptx"))
+    ppt_file = ppt.Presentations.Open(str(PPT_DIR / category[0] / "template.pptx"))
     ppt_file.Slides(1).Copy()
     copy_num = sum(
-        1 for key in language_data if key.startswith(key_prefix) and validator(key)
+        1 for key in language_data if is_valid_key(key, *category)
     )
     for _ in range(copy_num - 1):
         ppt_file.Slides.Paste()
-    ppt_file.SaveAs(str(PPT_DIR / category / "copied.pptx"))
+    ppt_file.SaveAs(str(PPT_DIR / category[0] / "copied.pptx"))
     ppt_file.Close()
     ppt.Quit()
     print("已完成。\n")
@@ -51,17 +44,20 @@ def main() -> None:
     """
     主函数，检查各类别是否被忽略，并调用对应的复制幻灯片函数
     """
-
+    if not IGNORE_CATEGORIES["advancements"]:
+        copy_slide("advancements")
+    if not IGNORE_CATEGORIES["biome"]:
+        copy_slide("biome")
     if not IGNORE_CATEGORIES["block"]:
-        copy_slide("block", "", is_valid_block)
+        copy_slide("block")
     if not IGNORE_CATEGORIES["entity"]:
-        copy_slide("entity", "", is_valid_entity)
+        copy_slide("entity")
     if not IGNORE_CATEGORIES["item"]:
-        copy_slide("item", "", is_valid_item)
+        copy_slide("item", "filled_map")
     if not IGNORE_CATEGORIES["effect"]:
-        copy_slide("effect", "effect.minecraft.", lambda x: True)
+        copy_slide("effect")
     if not IGNORE_CATEGORIES["enchantment"]:
-        copy_slide("enchantment", "enchantment.minecraft.", lambda x: True)
+        copy_slide("enchantment")
 
 
 if __name__ == "__main__":
