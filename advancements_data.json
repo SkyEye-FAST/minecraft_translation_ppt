@@ -1,0 +1,592 @@
+{
+    "adventuring_time": {
+        "key": "advancements.adventure.adventuring_time.title",
+        "frame": "challenge",
+        "icon": "diamond_boots"
+    },
+    "arbalistic": {
+        "key": "advancements.adventure.arbalistic.title",
+        "frame": "challenge",
+        "icon": "crossbow"
+    },
+    "avoid_vibration": {
+        "key": "advancements.adventure.avoid_vibration.title",
+        "frame": "normal",
+        "icon": "sculk_sensor"
+    },
+    "blowback": {
+        "key": "advancements.adventure.blowback.title",
+        "frame": "challenge",
+        "icon": "wind_charge"
+    },
+    "brush_armadillo": {
+        "key": "advancements.adventure.brush_armadillo.title",
+        "frame": "normal",
+        "icon": "armadillo_scute"
+    },
+    "bullseye": {
+        "key": "advancements.adventure.bullseye.title",
+        "frame": "challenge",
+        "icon": "target"
+    },
+    "crafters_crafting_crafters": {
+        "key": "advancements.adventure.crafters_crafting_crafters.title",
+        "frame": "normal",
+        "icon": "crafter"
+    },
+    "craft_decorated_pot_using_only_sherds": {
+        "key": "advancements.adventure.craft_decorated_pot_using_only_sherds.title",
+        "frame": "normal",
+        "icon": "decorated_pot"
+    },
+    "fall_from_world_height": {
+        "key": "advancements.adventure.fall_from_world_height.title",
+        "frame": "normal",
+        "icon": "water_bucket"
+    },
+    "hero_of_the_village": {
+        "key": "advancements.adventure.hero_of_the_village.title",
+        "frame": "challenge",
+        "icon": "white_banner"
+    },
+    "honey_block_slide": {
+        "key": "advancements.adventure.honey_block_slide.title",
+        "frame": "normal",
+        "icon": "honey_block"
+    },
+    "kill_all_mobs": {
+        "key": "advancements.adventure.kill_all_mobs.title",
+        "frame": "challenge",
+        "icon": "diamond_sword"
+    },
+    "kill_a_mob": {
+        "key": "advancements.adventure.kill_a_mob.title",
+        "frame": "normal",
+        "icon": "iron_sword"
+    },
+    "kill_mob_near_sculk_catalyst": {
+        "key": "advancements.adventure.kill_mob_near_sculk_catalyst.title",
+        "frame": "challenge",
+        "icon": "sculk_catalyst"
+    },
+    "lighten_up": {
+        "key": "advancements.adventure.lighten_up.title",
+        "frame": "normal",
+        "icon": "copper_bulb"
+    },
+    "lightning_rod_with_villager_no_fire": {
+        "key": "advancements.adventure.lightning_rod_with_villager_no_fire.title",
+        "frame": "normal",
+        "icon": "lightning_rod"
+    },
+    "minecraft_trials_edition": {
+        "key": "advancements.adventure.minecraft_trials_edition.title",
+        "frame": "normal",
+        "icon": "chiseled_tuff"
+    },
+    "ol_betsy": {
+        "key": "advancements.adventure.ol_betsy.title",
+        "frame": "normal",
+        "icon": "crossbow"
+    },
+    "overoverkill": {
+        "key": "advancements.adventure.overoverkill.title",
+        "frame": "challenge",
+        "icon": "mace"
+    },
+    "play_jukebox_in_meadows": {
+        "key": "advancements.adventure.play_jukebox_in_meadows.title",
+        "frame": "normal",
+        "icon": "jukebox"
+    },
+    "read_power_of_chiseled_bookshelf": {
+        "key": "advancements.adventure.read_power_from_chiseled_bookshelf.title",
+        "frame": "normal",
+        "icon": "chiseled_bookshelf"
+    },
+    "revaulting": {
+        "key": "advancements.adventure.revaulting.title",
+        "frame": "goal",
+        "icon": "ominous_trial_key"
+    },
+    "root": {
+        "key": "advancements.story.root.title",
+        "frame": "normal",
+        "icon": "grass_block"
+    },
+    "salvage_sherd": {
+        "key": "advancements.adventure.salvage_sherd.title",
+        "frame": "normal",
+        "icon": "brush"
+    },
+    "shoot_arrow": {
+        "key": "advancements.adventure.shoot_arrow.title",
+        "frame": "normal",
+        "icon": "bow"
+    },
+    "sleep_in_bed": {
+        "key": "advancements.adventure.sleep_in_bed.title",
+        "frame": "normal",
+        "icon": "red_bed"
+    },
+    "sniper_duel": {
+        "key": "advancements.adventure.sniper_duel.title",
+        "frame": "challenge",
+        "icon": "arrow"
+    },
+    "spyglass_at_dragon": {
+        "key": "advancements.adventure.spyglass_at_dragon.title",
+        "frame": "normal",
+        "icon": "spyglass"
+    },
+    "spyglass_at_ghast": {
+        "key": "advancements.adventure.spyglass_at_ghast.title",
+        "frame": "normal",
+        "icon": "spyglass"
+    },
+    "spyglass_at_parrot": {
+        "key": "advancements.adventure.spyglass_at_parrot.title",
+        "frame": "normal",
+        "icon": "spyglass"
+    },
+    "summon_iron_golem": {
+        "key": "advancements.adventure.summon_iron_golem.title",
+        "frame": "goal",
+        "icon": "carved_pumpkin"
+    },
+    "throw_trident": {
+        "key": "advancements.adventure.throw_trident.title",
+        "frame": "normal",
+        "icon": "trident"
+    },
+    "totem_of_undying": {
+        "key": "advancements.adventure.totem_of_undying.title",
+        "frame": "goal",
+        "icon": "totem_of_undying"
+    },
+    "trade": {
+        "key": "advancements.adventure.trade.title",
+        "frame": "normal",
+        "icon": "emerald"
+    },
+    "trade_at_world_height": {
+        "key": "advancements.adventure.trade_at_world_height.title",
+        "frame": "normal",
+        "icon": "emerald"
+    },
+    "trim_with_all_exclusive_armor_patterns": {
+        "key": "advancements.adventure.trim_with_all_exclusive_armor_patterns.title",
+        "frame": "challenge",
+        "icon": "silence_armor_trim_smithing_template"
+    },
+    "trim_with_any_armor_pattern": {
+        "key": "advancements.adventure.trim_with_any_armor_pattern.title",
+        "frame": "normal",
+        "icon": "dune_armor_trim_smithing_template"
+    },
+    "two_birds_one_arrow": {
+        "key": "advancements.adventure.two_birds_one_arrow.title",
+        "frame": "challenge",
+        "icon": "crossbow"
+    },
+    "under_lock_and_key": {
+        "key": "advancements.adventure.under_lock_and_key.title",
+        "frame": "normal",
+        "icon": "trial_key"
+    },
+    "very_very_frightening": {
+        "key": "advancements.adventure.very_very_frightening.title",
+        "frame": "normal",
+        "icon": "trident"
+    },
+    "voluntary_exile": {
+        "key": "advancements.adventure.voluntary_exile.title",
+        "frame": "normal",
+        "icon": "white_banner"
+    },
+    "walk_on_powder_snow_with_leather_boots": {
+        "key": "advancements.adventure.walk_on_powder_snow_with_leather_boots.title",
+        "frame": "normal",
+        "icon": "leather_boots"
+    },
+    "whos_the_pillager_now": {
+        "key": "advancements.adventure.whos_the_pillager_now.title",
+        "frame": "normal",
+        "icon": "crossbow"
+    },
+    "who_needs_rockets": {
+        "key": "advancements.adventure.who_needs_rockets.title",
+        "frame": "normal",
+        "icon": "wind_charge"
+    },
+    "dragon_breath": {
+        "key": "advancements.end.dragon_breath.title",
+        "frame": "goal",
+        "icon": "dragon_breath"
+    },
+    "dragon_egg": {
+        "key": "advancements.end.dragon_egg.title",
+        "frame": "goal",
+        "icon": "dragon_egg"
+    },
+    "elytra": {
+        "key": "advancements.end.elytra.title",
+        "frame": "goal",
+        "icon": "elytra"
+    },
+    "enter_end_gateway": {
+        "key": "advancements.end.enter_end_gateway.title",
+        "frame": "normal",
+        "icon": "ender_pearl"
+    },
+    "find_end_city": {
+        "key": "advancements.end.find_end_city.title",
+        "frame": "normal",
+        "icon": "purpur_block"
+    },
+    "kill_dragon": {
+        "key": "advancements.end.kill_dragon.title",
+        "frame": "normal",
+        "icon": "dragon_head"
+    },
+    "levitate": {
+        "key": "advancements.end.levitate.title",
+        "frame": "challenge",
+        "icon": "shulker_shell"
+    },
+    "respawn_dragon": {
+        "key": "advancements.end.respawn_dragon.title",
+        "frame": "goal",
+        "icon": "end_crystal"
+    },
+    "allay_deliver_cake_to_note_block": {
+        "key": "advancements.husbandry.allay_deliver_cake_to_note_block.title",
+        "frame": "normal",
+        "icon": "note_block"
+    },
+    "allay_deliver_item_to_player": {
+        "key": "advancements.husbandry.allay_deliver_item_to_player.title",
+        "frame": "normal",
+        "icon": "cookie"
+    },
+    "axolotl_in_a_bucket": {
+        "key": "advancements.husbandry.axolotl_in_a_bucket.title",
+        "frame": "normal",
+        "icon": "axolotl_bucket"
+    },
+    "balanced_diet": {
+        "key": "advancements.husbandry.balanced_diet.title",
+        "frame": "challenge",
+        "icon": "apple"
+    },
+    "bred_all_animals": {
+        "key": "advancements.husbandry.breed_all_animals.title",
+        "frame": "challenge",
+        "icon": "golden_carrot"
+    },
+    "breed_an_animal": {
+        "key": "advancements.husbandry.breed_an_animal.title",
+        "frame": "normal",
+        "icon": "wheat"
+    },
+    "complete_catalogue": {
+        "key": "advancements.husbandry.complete_catalogue.title",
+        "frame": "challenge",
+        "icon": "cod"
+    },
+    "feed_snifflet": {
+        "key": "advancements.husbandry.feed_snifflet.title",
+        "frame": "normal",
+        "icon": "torchflower_seeds"
+    },
+    "fishy_business": {
+        "key": "advancements.husbandry.fishy_business.title",
+        "frame": "normal",
+        "icon": "fishing_rod"
+    },
+    "froglights": {
+        "key": "advancements.husbandry.froglights.title",
+        "frame": "challenge",
+        "icon": "verdant_froglight"
+    },
+    "kill_axolotl_target": {
+        "key": "advancements.husbandry.kill_axolotl_target.title",
+        "frame": "normal",
+        "icon": "tropical_fish_bucket"
+    },
+    "leash_all_frog_variants": {
+        "key": "advancements.husbandry.leash_all_frog_variants.title",
+        "frame": "normal",
+        "icon": "lead"
+    },
+    "make_a_sign_glow": {
+        "key": "advancements.husbandry.make_a_sign_glow.title",
+        "frame": "normal",
+        "icon": "glow_ink_sac"
+    },
+    "obtain_netherite_hoe": {
+        "key": "advancements.husbandry.netherite_hoe.title",
+        "frame": "challenge",
+        "icon": "netherite_hoe"
+    },
+    "obtain_sniffer_egg": {
+        "key": "advancements.husbandry.obtain_sniffer_egg.title",
+        "frame": "normal",
+        "icon": "sniffer_egg"
+    },
+    "plant_any_sniffer_seed": {
+        "key": "advancements.husbandry.plant_any_sniffer_seed.title",
+        "frame": "normal",
+        "icon": "pitcher_pod"
+    },
+    "plant_seed": {
+        "key": "advancements.husbandry.plant_seed.title",
+        "frame": "normal",
+        "icon": "wheat"
+    },
+    "remove_wolf_armor": {
+        "key": "advancements.husbandry.remove_wolf_armor.title",
+        "frame": "normal",
+        "icon": "shears"
+    },
+    "repair_wolf_armor": {
+        "key": "advancements.husbandry.repair_wolf_armor.title",
+        "frame": "normal",
+        "icon": "wolf_armor"
+    },
+    "ride_a_boat_with_a_goat": {
+        "key": "advancements.husbandry.ride_a_boat_with_a_goat.title",
+        "frame": "normal",
+        "icon": "oak_boat"
+    },
+    "safely_harvest_honey": {
+        "key": "advancements.husbandry.safely_harvest_honey.title",
+        "frame": "normal",
+        "icon": "honey_bottle"
+    },
+    "silk_touch_nest": {
+        "key": "advancements.husbandry.silk_touch_nest.title",
+        "frame": "normal",
+        "icon": "bee_nest"
+    },
+    "tactical_fishing": {
+        "key": "advancements.husbandry.tactical_fishing.title",
+        "frame": "normal",
+        "icon": "pufferfish_bucket"
+    },
+    "tadpole_in_a_bucket": {
+        "key": "advancements.husbandry.tadpole_in_a_bucket.title",
+        "frame": "normal",
+        "icon": "tadpole_bucket"
+    },
+    "tame_an_animal": {
+        "key": "advancements.husbandry.tame_an_animal.title",
+        "frame": "normal",
+        "icon": "lead"
+    },
+    "wax_off": {
+        "key": "advancements.husbandry.wax_off.title",
+        "frame": "normal",
+        "icon": "stone_axe"
+    },
+    "wax_on": {
+        "key": "advancements.husbandry.wax_on.title",
+        "frame": "normal",
+        "icon": "honeycomb"
+    },
+    "whole_pack": {
+        "key": "advancements.husbandry.whole_pack.title",
+        "frame": "challenge",
+        "icon": "bone"
+    },
+    "all_effects": {
+        "key": "advancements.nether.all_effects.title",
+        "frame": "challenge",
+        "icon": "bucket"
+    },
+    "all_potions": {
+        "key": "advancements.nether.all_potions.title",
+        "frame": "challenge",
+        "icon": "milk_bucket"
+    },
+    "brew_potion": {
+        "key": "advancements.nether.brew_potion.title",
+        "frame": "normal",
+        "icon": "potion"
+    },
+    "charge_respawn_anchor": {
+        "key": "advancements.nether.charge_respawn_anchor.title",
+        "frame": "normal",
+        "icon": "respawn_anchor"
+    },
+    "create_beacon": {
+        "key": "advancements.nether.create_beacon.title",
+        "frame": "normal",
+        "icon": "beacon"
+    },
+    "create_full_beacon": {
+        "key": "advancements.nether.create_full_beacon.title",
+        "frame": "goal",
+        "icon": "beacon"
+    },
+    "distract_piglin": {
+        "key": "advancements.nether.distract_piglin.title",
+        "frame": "normal",
+        "icon": "gold_ingot"
+    },
+    "explore_nether": {
+        "key": "advancements.nether.explore_nether.title",
+        "frame": "challenge",
+        "icon": "netherite_boots"
+    },
+    "fast_travel": {
+        "key": "advancements.nether.fast_travel.title",
+        "frame": "challenge",
+        "icon": "map"
+    },
+    "find_bastion": {
+        "key": "advancements.nether.find_bastion.title",
+        "frame": "normal",
+        "icon": "polished_blackstone_bricks"
+    },
+    "find_fortress": {
+        "key": "advancements.nether.find_fortress.title",
+        "frame": "normal",
+        "icon": "nether_bricks"
+    },
+    "get_wither_skull": {
+        "key": "advancements.nether.get_wither_skull.title",
+        "frame": "normal",
+        "icon": "wither_skeleton_skull"
+    },
+    "loot_bastion": {
+        "key": "advancements.nether.loot_bastion.title",
+        "frame": "normal",
+        "icon": "chest"
+    },
+    "netherite_armor": {
+        "key": "advancements.nether.netherite_armor.title",
+        "frame": "challenge",
+        "icon": "netherite_chestplate"
+    },
+    "obtain_ancient_debris": {
+        "key": "advancements.nether.obtain_ancient_debris.title",
+        "frame": "normal",
+        "icon": "ancient_debris"
+    },
+    "obtain_blaze_rod": {
+        "key": "advancements.nether.obtain_blaze_rod.title",
+        "frame": "normal",
+        "icon": "blaze_rod"
+    },
+    "obtain_crying_obsidian": {
+        "key": "advancements.nether.obtain_crying_obsidian.title",
+        "frame": "normal",
+        "icon": "crying_obsidian"
+    },
+    "return_to_sender": {
+        "key": "advancements.nether.return_to_sender.title",
+        "frame": "challenge",
+        "icon": "fire_charge"
+    },
+    "ride_strider": {
+        "key": "advancements.nether.ride_strider.title",
+        "frame": "normal",
+        "icon": "warped_fungus_on_a_stick"
+    },
+    "ride_strider_in_overworld_lava": {
+        "key": "advancements.nether.ride_strider_in_overworld_lava.title",
+        "frame": "normal",
+        "icon": "warped_fungus_on_a_stick"
+    },
+    "summon_wither": {
+        "key": "advancements.nether.summon_wither.title",
+        "frame": "normal",
+        "icon": "nether_star"
+    },
+    "uneasy_alliance": {
+        "key": "advancements.nether.uneasy_alliance.title",
+        "frame": "challenge",
+        "icon": "ghast_tear"
+    },
+    "use_lodestone": {
+        "key": "advancements.nether.use_lodestone.title",
+        "frame": "normal",
+        "icon": "lodestone"
+    },
+    "cure_zombie_villager": {
+        "key": "advancements.story.cure_zombie_villager.title",
+        "frame": "goal",
+        "icon": "golden_apple"
+    },
+    "deflect_arrow": {
+        "key": "advancements.story.deflect_arrow.title",
+        "frame": "normal",
+        "icon": "shield"
+    },
+    "enchant_item": {
+        "key": "advancements.story.enchant_item.title",
+        "frame": "normal",
+        "icon": "enchanted_book"
+    },
+    "enter_the_end": {
+        "key": "advancements.story.enter_the_end.title",
+        "frame": "normal",
+        "icon": "end_stone"
+    },
+    "enter_the_nether": {
+        "key": "advancements.story.enter_the_nether.title",
+        "frame": "normal",
+        "icon": "flint_and_steel"
+    },
+    "follow_ender_eye": {
+        "key": "advancements.story.follow_ender_eye.title",
+        "frame": "normal",
+        "icon": "ender_eye"
+    },
+    "form_obsidian": {
+        "key": "advancements.story.form_obsidian.title",
+        "frame": "normal",
+        "icon": "obsidian"
+    },
+    "iron_tools": {
+        "key": "advancements.story.iron_tools.title",
+        "frame": "normal",
+        "icon": "iron_pickaxe"
+    },
+    "lava_bucket": {
+        "key": "advancements.story.lava_bucket.title",
+        "frame": "normal",
+        "icon": "lava_bucket"
+    },
+    "mine_diamond": {
+        "key": "advancements.story.mine_diamond.title",
+        "frame": "normal",
+        "icon": "diamond"
+    },
+    "mine_stone": {
+        "key": "advancements.story.mine_stone.title",
+        "frame": "normal",
+        "icon": "wooden_pickaxe"
+    },
+    "obtain_armor": {
+        "key": "advancements.story.obtain_armor.title",
+        "frame": "normal",
+        "icon": "iron_chestplate"
+    },
+    "shiny_gear": {
+        "key": "advancements.story.shiny_gear.title",
+        "frame": "normal",
+        "icon": "diamond_chestplate"
+    },
+    "smelt_iron": {
+        "key": "advancements.story.smelt_iron.title",
+        "frame": "normal",
+        "icon": "iron_ingot"
+    },
+    "upgrade_tools": {
+        "key": "advancements.story.upgrade_tools.title",
+        "frame": "normal",
+        "icon": "stone_pickaxe"
+    }
+}

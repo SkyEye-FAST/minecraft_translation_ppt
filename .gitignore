@@ -5,6 +5,8 @@ log/
 *.json
 !lang/supplements.json
 !image/image_mapping.json
+!en_us_diff.json
+!advancements_data.json
 finished_media/
 *.png
 *.pptx
