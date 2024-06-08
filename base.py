@@ -20,8 +20,8 @@ CONFIG_PATH = P / "configuration.toml"
 if not CONFIG_PATH.exists():
     print("\n无法找到配置文件，请将配置文件放置在与此脚本同级的目录下。")
     sys.exit()
-with open(CONFIG_PATH, "rb") as f:
-    config = tl.load(f)
+with open(CONFIG_PATH, "rb") as conf:
+    config = tl.load(conf)
 
 # 读取配置
 LANG_DIR = P / config["folder"]["language_folder"]
@@ -55,6 +55,63 @@ def is_valid_key(input_key: str, *categories: str) -> bool:
         bool: 如果是有效键名，返回 True，否则返回 False
     """
     return any(input_key.startswith(f"{category}") for category in categories)
+
+
+def load_language_files(file_list: List[str]) -> Dict[str, Ldata]:
+    """
+    读取语言文件。
+
+    Args:
+        file_list (List[str]): 语言文件名列表
+
+    Returns:
+        Dict[str, Ldata]: 包含语言数据的字典
+    """
+
+    print("开始读取语言文件。")
+    data = {}
+    for file in file_list:
+        with open(LANG_DIR / file, "r", encoding="utf-8") as lang:
+            data[l := file.split(".", maxsplit=1)[0]] = json.load(lang)
+            if NEW_STRINGS_ONLY:
+                data[l] = {k: v for k, v in data[l].items() if k in language_data}
+    print("语言文件读取成功。")
+    return data
+
+
+def sort_data(lang_data: Dict[str, Ldata], *categories: str) -> Dict[str, LdataTuple]:
+    """
+    排序语言数据。
+
+    Args:
+        lang_data (Dict[str, Ldata]): 语言数据
+        categories (str): 分类
+
+    Returns:
+        Dict[str, LdataTuple]: 排序后的语言数据
+    """
+
+    sorted_data = {
+        "en_us": sorted(
+            (
+                (key, value)
+                for key, value in lang_data["en_us"].items()
+                if is_valid_key(key, *categories)
+            ),
+            key=lambda x: x[1],
+        )
+    }
+    sorted_keys = [item[0] for item in sorted_data["en_us"]]
+    for lang_name in ["zh_cn", "zh_hk", "zh_tw", "lzh"]:
+        sorted_data[lang_name] = sorted(
+            (
+                (key, value)
+                for key, value in lang_data[lang_name].items()
+                if is_valid_key(key, *categories)
+            ),
+            key=lambda x: sorted_keys.index(x[0]),
+        )
+    return sorted_data
 
 
 # 读取语言文件

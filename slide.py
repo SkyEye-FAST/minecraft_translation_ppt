@@ -3,7 +3,7 @@
 
 import json
 import re
-from typing import Dict, List
+from typing import Dict
 
 from PIL import Image
 from pptx import Presentation as prstt
@@ -19,33 +19,11 @@ from base import (
     IGNORE_CATEGORIES,
     IGNORE_SUPPLEMENTS,
     NEW_STRINGS_ONLY,
-    is_valid_key,
+    sort_data,
+    load_language_files,
     Ldata,
     LdataTuple,
-    language_data,
 )
-
-
-def load_language_files(file_list: List[str]) -> Dict[str, Ldata]:
-    """
-    读取语言文件。
-
-    Args:
-        file_list (List[str]): 语言文件名列表
-
-    Returns:
-        Dict[str, Ldata]: 包含语言数据的字典
-    """
-
-    print("开始读取语言文件。")
-    data = {}
-    for file in file_list:
-        with open(LANG_DIR / file, "r", encoding="utf-8") as f:
-            data[l := file.split(".", maxsplit=1)[0]] = json.load(f)
-            if NEW_STRINGS_ONLY:
-                data[l] = {k: v for k, v in data[l].items() if k in language_data}
-    print("语言文件读取成功。")
-    return data
 
 
 def update_language_data(data: Dict[str, Ldata]) -> Dict[str, Ldata]:
@@ -220,41 +198,6 @@ def edit_slide(slide_data: Dict[str, LdataTuple], category: str) -> None:
         print(f"分类{category}不存在已复制的幻灯片。")
 
 
-def sort_data(lang_data: Dict[str, Ldata], *categories: str) -> Dict[str, LdataTuple]:
-    """
-    排序语言数据。
-
-    Args:
-        lang_data (Dict[str, Ldata]): 语言数据
-        categories (str): 多个分类
-
-    Returns:
-        Dict[str, LdataTuple]: 排序后的语言数据
-    """
-
-    sorted_data = {
-        "en_us": sorted(
-            (
-                (key, value)
-                for key, value in lang_data["en_us"].items()
-                if is_valid_key(key, *categories)
-            ),
-            key=lambda x: x[1],
-        )
-    }
-    sorted_keys = [item[0] for item in sorted_data["en_us"]]
-    for lang_name in ["zh_cn", "zh_hk", "zh_tw", "lzh"]:
-        sorted_data[lang_name] = sorted(
-            (
-                (key, value)
-                for key, value in lang_data[lang_name].items()
-                if is_valid_key(key, *categories)
-            ),
-            key=lambda x: sorted_keys.index(x[0]),
-        )
-    return sorted_data
-
-
 def main() -> None:
     """
     主函数，生成幻灯片内容。
@@ -268,11 +211,11 @@ def main() -> None:
 
     print("开始生成幻灯片内容。")
     if not IGNORE_CATEGORIES["advancements"]:
-        sorted_data_block = sort_data(data, "advancements")
-        edit_slide(sorted_data_block, "advancements")
+        sorted_data_advancements = sort_data(data, "advancements")
+        edit_slide(sorted_data_advancements, "advancements")
     if not IGNORE_CATEGORIES["biome"]:
-        sorted_data_block = sort_data(data, "biome")
-        edit_slide(sorted_data_block, "biome")
+        sorted_data_biome = sort_data(data, "biome")
+        edit_slide(sorted_data_biome, "biome")
     if not IGNORE_CATEGORIES["block"]:
         sorted_data_block = sort_data(data, "block")
         edit_slide(sorted_data_block, "block")
