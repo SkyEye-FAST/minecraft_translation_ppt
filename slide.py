@@ -18,30 +18,28 @@ from base import (
     SLIDE_CONFIG,
     IGNORE_CATEGORIES,
     IGNORE_SUPPLEMENTS,
-    NEW_STRINGS_ONLY,
     sort_data,
     load_language_files,
-    Ldata,
+    LdataCo,
     LdataTuple,
 )
 
 
-def update_language_data(data: Dict[str, Ldata]) -> Dict[str, Ldata]:
+def update_language_data(data: LdataCo, new_string: bool = False) -> LdataCo:
     """
     修正语言文件数据。
 
     Args:
-        data (Dict[str, Ldata]): 原始语言数据
+        data (LdataCo): 原始语言数据
+        new_string (bool): 是否为新增字符串数据
 
     Returns:
-        Dict[str, Ldata]: 修正后的语言数据
+        LdataCo: 修正后的语言数据
     """
 
     updated_data = data.copy()
     for lang in ["en_us", "zh_cn", "zh_hk", "zh_tw", "lzh"]:
         smithing_template_str = data[lang].get("item.minecraft.smithing_template", "")
-        banner_pattern_str = data[lang].get("item.minecraft.mojang_banner_pattern", "")
-
         trim_keys = [key for key in data[lang] if "trim_smithing_template" in key]
         for key in trim_keys:
             variant = key.split(".")[2].split("_", maxsplit=1)[0]
@@ -56,16 +54,17 @@ def update_language_data(data: Dict[str, Ldata]) -> Dict[str, Ldata]:
             key
             for key in data[lang]
             if key.startswith("item.minecraft.music_disc")
-            or re.match(r"item\.minecraft\.(.*)_banner_pattern", key)
+            or re.match(r"^item\.minecraft\.[^.]*_banner_pattern$", key)
         ]
         for key in keys_to_delete:
             updated_data[lang].pop(key, None)
         updated_data[lang].pop("item.minecraft.smithing_template", None)
 
-        if not NEW_STRINGS_ONLY:
+        if not new_string:
             netherite_upgrade_str = data[lang].get(
                 "upgrade.minecraft.netherite_upgrade", ""
             )
+            banner_pattern_str = data[lang].get("item.minecraft.mojang_banner_pattern", "")
             music_disc_str = data[lang].get("item.minecraft.music_disc_5", "")
             updated_data[lang]["item.minecraft.netherite_upgrade_smithing_template"] = (
                 f"{netherite_upgrade_str} {smithing_template_str}"
@@ -78,12 +77,12 @@ def update_language_data(data: Dict[str, Ldata]) -> Dict[str, Ldata]:
     return updated_data
 
 
-def load_supplements(data: Dict[str, Ldata]) -> None:
+def load_supplements(data: LdataCo) -> None:
     """
     读取并合并补充字符串。
 
     Args:
-        data (Dict[str, Ldata]): 语言数据
+        data (LdataCo): 语言数据
     """
 
     with open(LANG_DIR / "supplements.json", "r", encoding="utf-8") as f:
@@ -204,8 +203,12 @@ def main() -> None:
     """
 
     file_list = ["en_us.json", "zh_cn.json", "zh_hk.json", "zh_tw.json", "lzh.json"]
-    data = load_language_files(file_list)
-    data = update_language_data(data)
+    data, data_all = load_language_files(file_list)
+    data = update_language_data(data, True)
+    data_all = update_language_data(data_all)
+    for lang in ["en_us", "zh_cn", "zh_hk", "zh_tw", "lzh"]:
+        trims = {k: data_all[lang][k] for k in data[lang] if "trim_smithing_template" in k}
+        data[lang].update(trims)
     if not IGNORE_SUPPLEMENTS:
         load_supplements(data)
 

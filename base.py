@@ -13,6 +13,7 @@ P = Path(__file__).resolve().parent
 
 # 类型别名
 Ldata: TypeAlias = Dict[str, str]
+LdataCo: TypeAlias = Dict[str, Ldata]
 LdataTuple: TypeAlias = List[Tuple[str, str]]
 
 # 加载配置
@@ -57,7 +58,7 @@ def is_valid_key(input_key: str, *categories: str) -> bool:
     return any(input_key.startswith(f"{category}") for category in categories)
 
 
-def load_language_files(file_list: List[str]) -> Dict[str, Ldata]:
+def load_language_files(file_list: List[str]) -> Tuple[LdataCo, LdataCo]:
     """
     读取语言文件。
 
@@ -65,26 +66,26 @@ def load_language_files(file_list: List[str]) -> Dict[str, Ldata]:
         file_list (List[str]): 语言文件名列表
 
     Returns:
-        Dict[str, Ldata]: 包含语言数据的字典
+        Tuple[LdataCo, LdataCo]: 包含语言数据的字典
     """
 
     print("开始读取语言文件。")
-    data = {}
+    data, data_all = {}, {}
     for file in file_list:
         with open(LANG_DIR / file, "r", encoding="utf-8") as lang:
-            data[l := file.split(".", maxsplit=1)[0]] = json.load(lang)
+            data_all[l := file.split(".", maxsplit=1)[0]] = json.load(lang)
             if NEW_STRINGS_ONLY:
-                data[l] = {k: v for k, v in data[l].items() if k in language_data}
+                data[l] = {k: v for k, v in data_all[l].items() if k in language_data}
     print("语言文件读取成功。")
-    return data
+    return data, data_all
 
 
-def sort_data(lang_data: Dict[str, Ldata], *categories: str) -> Dict[str, LdataTuple]:
+def sort_data(lang_data: LdataCo, *categories: str) -> Dict[str, LdataTuple]:
     """
     排序语言数据。
 
     Args:
-        lang_data (Dict[str, Ldata]): 语言数据
+        lang_data (LdataCo): 语言数据
         categories (str): （多个）分类
 
     Returns:
@@ -125,29 +126,29 @@ else:
     language_data = language_data_all
 
 # 修正语言文件
-keys_to_remove = [
-    key
-    for key in language_data.keys()
-    if key.startswith("item.minecraft.music_disc")
-    or re.match(r"^item\.minecraft\.[^.]*_banner_pattern$", key)
-]
-keys_to_remove.append("item.minecraft.smithing_template")
+for d in [language_data, language_data_all]:
+    keys_to_remove = [
+        key
+        for key in d.keys()
+        if key.startswith("item.minecraft.music_disc")
+        or re.match(r"^item\.minecraft\.[^.]*_banner_pattern$", key)
+    ]
+    keys_to_remove.append("item.minecraft.smithing_template")
 
-for key in keys_to_remove:
-    language_data.pop(key, None)
+    for key in keys_to_remove:
+        d.pop(key, None)
 
-updated_language_data = language_data.copy()
+    updated_language_data = d.copy()
 
-for key, value in language_data.items():
-    if "trim_smithing_template" in key:
-        variant = key.split(".")[2].split("_", maxsplit=1)[0]
-        variant_string = updated_language_data.get(
-            f"trim_pattern.minecraft.{variant}", variant
-        )
-        updated_language_data[key] = f"{variant_string} Smithing Template"
+    for key, value in d.items():
+        if "trim_smithing_template" in key:
+            variant = key.split(".")[2].split("_", maxsplit=1)[0]
+            variant_string = updated_language_data.get(
+                f"trim_pattern.minecraft.{variant}", variant
+            )
+            updated_language_data[key] = f"{variant_string} Smithing Template"
 
-language_data.update(updated_language_data)
-
+    d.update(updated_language_data)
 
 update_data = {
     "item.minecraft.netherite_upgrade_smithing_template": "Netherite Upgrade Smithing Template",
@@ -155,5 +156,6 @@ update_data = {
     "item.minecraft.*_banner_pattern": "Banner Pattern",
 }
 
+language_data_all.update(update_data)
 if not NEW_STRINGS_ONLY:
     language_data.update(update_data)
