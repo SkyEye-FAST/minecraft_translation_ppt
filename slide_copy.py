@@ -20,7 +20,6 @@ def copy_slide(*category: str) -> None:
 
     Args:
         category (str): 类别
-        validator (Optional[Callable[[str], bool]]): 验证函数，用于验证键是否有效；默认为None
     """
 
     print(f"开始复制模板幻灯片，分类：{category[0]}。")

@@ -49,7 +49,7 @@ def is_valid_key(input_key: str, *categories: str) -> bool:
 
     Args:
         input_key (str): 键名
-        categories (str): 多个类别（如 'block', 'entity', 'item'）
+        categories (str): （多个）分类
 
     Returns:
         bool: 如果是有效键名，返回 True，否则返回 False
@@ -85,7 +85,7 @@ def sort_data(lang_data: Dict[str, Ldata], *categories: str) -> Dict[str, LdataT
 
     Args:
         lang_data (Dict[str, Ldata]): 语言数据
-        categories (str): 分类
+        categories (str): （多个）分类
 
     Returns:
         Dict[str, LdataTuple]: 排序后的语言数据
@@ -115,15 +115,14 @@ def sort_data(lang_data: Dict[str, Ldata], *categories: str) -> Dict[str, LdataT
 
 
 # 读取语言文件
+with open(LANG_DIR / "en_us.json", "r", encoding="utf-8") as f:
+    language_data_all: Ldata = json.load(f)
 if NEW_STRINGS_ONLY:
     LANG_FILE_PATH = P / "en_us_diff.json"
+    with LANG_FILE_PATH.open("r", encoding="utf-8") as f:
+        language_data: Ldata = json.load(f)
 else:
-    LANG_FILE_PATH = LANG_DIR / "en_us.json"
-if not LANG_FILE_PATH.exists():
-    print("\n无法找到语言文件，请检查文件路径。")
-    sys.exit()
-with open(LANG_FILE_PATH, "r", encoding="utf-8") as f:
-    language_data: Ldata = json.load(f)
+    language_data = language_data_all
 
 # 修正语言文件
 keys_to_remove = [
