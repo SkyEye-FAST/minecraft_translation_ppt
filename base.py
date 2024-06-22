@@ -43,6 +43,9 @@ IGNORE_SAVED_IMAGE = config["image"]["ignore_saved_image"]
 IGNORE_SUPPLEMENTS = config["lang"]["ignore_supplements"]
 NEW_STRINGS_ONLY = config["lang"]["new_strings_only"]
 
+lang_list = ["en_us", "zh_cn", "zh_hk", "zh_tw", "lzh"]
+lang_file_list = [f"{l}.json" for l in lang_list]
+lang_list_table = lang_list[1:]
 
 def is_valid_key(input_key: str, *categories: str) -> bool:
     """

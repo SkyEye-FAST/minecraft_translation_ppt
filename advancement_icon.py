@@ -10,14 +10,14 @@ from base import (
     IMAGE_DIR,
     sort_data,
     load_language_files,
+    lang_file_list,
     language_data_all,
 )
 
 with open(P / "advancements_data.json", "r", encoding="utf-8") as f:
     data_adv = json.load(f)
 
-file_list = ["en_us.json", "zh_cn.json", "zh_hk.json", "zh_tw.json", "lzh.json"]
-sorted_data = sort_data(load_language_files(file_list), "advancements")["en_us"]
+sorted_data = sort_data(load_language_files(lang_file_list), "advancements")["en_us"]
 
 prs_path = PPT_DIR / "advancements" / "output.pptx"
 prs = prstt(prs_path)

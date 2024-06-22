@@ -20,6 +20,9 @@ from base import (
     IGNORE_SUPPLEMENTS,
     sort_data,
     load_language_files,
+    lang_list,
+    lang_file_list,
+    lang_list_table,
     LdataCo,
     LdataTuple,
 )
@@ -38,7 +41,7 @@ def update_language_data(data: LdataCo, new_string: bool = False) -> LdataCo:
     """
 
     updated_data = data.copy()
-    for lang in ["en_us", "zh_cn", "zh_hk", "zh_tw", "lzh"]:
+    for lang in lang_list:
         smithing_template_str = data[lang].get("item.minecraft.smithing_template", "")
         trim_keys = [key for key in data[lang] if "trim_smithing_template" in key]
         for key in trim_keys:
@@ -87,7 +90,7 @@ def load_supplements(data: LdataCo) -> None:
 
     with open(LANG_DIR / "supplements.json", "r", encoding="utf-8") as f:
         supplements = json.load(f)
-    for lang in ["zh_cn", "zh_hk", "zh_tw", "lzh"]:
+    for lang in lang_list_table:
         data[lang].update(supplements[lang])
     print(f"已补充{len(supplements['zh_cn'])}条字符串。")
 
@@ -202,11 +205,10 @@ def main() -> None:
     主函数，生成幻灯片内容。
     """
 
-    file_list = ["en_us.json", "zh_cn.json", "zh_hk.json", "zh_tw.json", "lzh.json"]
-    data, data_all = load_language_files(file_list)
+    data, data_all = load_language_files(lang_file_list)
     data = update_language_data(data, True)
     data_all = update_language_data(data_all)
-    for lang in ["en_us", "zh_cn", "zh_hk", "zh_tw", "lzh"]:
+    for lang in lang_list:
         trims = {k: data_all[lang][k] for k in data[lang] if "trim_smithing_template" in k}
         data[lang].update(trims)
     if not IGNORE_SUPPLEMENTS:
