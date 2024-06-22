@@ -7,7 +7,7 @@ import logging
 from typing import Optional, List
 
 import requests
-from requests.exceptions import SSLError, ReadTimeout
+from requests.exceptions import SSLError, ReadTimeout, RequestException
 
 from base import (
     LOG_DIR,
@@ -136,7 +136,7 @@ if __name__ == "__main__":
                     else:
                         logging.error("达到最大重试次数，终止操作。")
                         break
-                except requests.exceptions.RequestException as e:
+                except RequestException as e:
                     logging.error("请求异常：%s", e)
                     break
         else:
